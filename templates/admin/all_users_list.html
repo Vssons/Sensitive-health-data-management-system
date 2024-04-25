@@ -1,0 +1,63 @@
+{% extends ('admin/admin_base.html') %}
+{% block title %}All Users List {% endblock %}
+{% block content %}
+
+<style>
+.table{
+border:1px solid white;
+max-height:70vh;
+margin-left:70px;
+overflow:scroll;
+}
+    .t_body{
+    background-color:black;
+    }
+
+</style>
+<button class="font"><a href="/create_user_page"  class="font link-primary">Add User</a></button><br>
+<div style="width:100%;">
+<table class="table table-hover table-dark table-bordered text-center">
+  <thead>
+    <tr>
+                <th scope="col">USER CODE</th>
+                <th scope="col">USER ID</th>
+                <th scope="col">USER NAME</th>
+                <th scope="col" style="width:50px;">Date of Join</th>
+                <th scope="col">AGE</th>
+                <th scope="col">Gender</th>
+                <th scope="col">EMAIL ID</th>
+                <th scope="col">URL</th>
+                <th scope="col">EDIT</th>
+                <th scope="col">DELETE</th>
+    </tr>
+  </thead>
+  <tbody class="t_body">
+
+             {% for i in data %}
+            <tr>
+
+       <td>{{ i[0] }}</td><td>{{ i[1] }}</td><td>{{ i[2] }}</td><td>{{ i[3] }}</td><td>{{ i[4] }}</td><td>{{ i[5] }}</td><td>{{ i[6] }}</td><td>{{ i[9] }}</td>
+<!--                <td>{{ i[5] }}</td>-->
+
+              <td>  <form action="/dataOwner_user_edit" method="post">
+                    <input type="hidden" name="user_id" readonly value="{{ i[0] }}">
+                     <button type="submit" style="padding:2px 8px;" class="file_button">Edit</button>
+                </form></td>
+
+                  <td><form action="/dataOwner_user_delete" method="post">
+                       <input type="hidden" name="user_id" readonly value="{{ i[1] }}">
+                <button type="submit" style="padding:2px 8px;" class="file_button">Delete</button>
+                  </form></td>
+            </tr>
+                   {% endfor %}
+
+  </tbody>
+</table>
+</div>
+
+{% endblock %}
+
+
+
+
+

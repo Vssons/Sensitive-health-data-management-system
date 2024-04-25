@@ -1,0 +1,57 @@
+{% extends ('admin/admin_base.html') %}
+{% block title %}All Files List {% endblock %}
+{% block content %}
+
+<style>
+.main-table-div{
+    width:110%;
+     height:80vh;
+     margin-left:75px;
+   overflow:auto;
+}
+
+.table{
+border:1px solid white;
+text-align:center;
+}
+    .t_body{
+    min-height:50px;
+    border:1px solid white;
+    background-color:black;
+    }
+</style>
+
+<div class="main-table-div">
+
+    <h3 style="color:white;">All Files</h3>
+<table class="table table-hover table-dark table-bordered">
+  <thead>
+             <tr>
+                 <th scope="col">F.NO</th>
+                 <th scope="col">DATE</th>
+                 <th scope="col">Do_code</th>
+                 <th scope="col">Du_code</th>
+                 <th scope="col">FILE NAME</th>
+                 <th scope="col">Summary</th>
+             </tr>
+  </thead>
+  <tbody class="t_body">
+
+             {% for i in data %}
+            <tr>
+                <td>{{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[2] }}</td>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>{{ i[5] }}</td>
+            </tr>
+                   {% endfor %}
+
+  </tbody>
+</table>
+</div>
+<p id="res"></p>
+
+
+{% endblock %}

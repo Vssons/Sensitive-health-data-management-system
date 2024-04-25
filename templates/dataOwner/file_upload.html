@@ -1,0 +1,125 @@
+{% extends ('dataOwner/dataOwner_base.html') %}
+{% block title %} dataOwner | UploadFile {% endblock %}
+{% block content %}
+
+<style>
+*{
+font-family:san-serif;
+}
+.form-control{
+background:transparent;
+color:white;
+}
+
+select option{
+font-weight:bold;
+margin: 3px 5px;
+padding: 2px 0;
+border-radius:20%;
+width:80%;
+position:relative;
+left:10%;
+}
+.home-card{
+margin-left:50px;
+box-shadow: inset 3px 4px 5px 6px #000;
+height:60vh;
+width:90%;
+padding-left:8%;
+}
+</style>
+
+         <h1 class="second-h2 text-white" >UPLOAD FILE </h1><br>
+       <form class="form-horizontal home-card" action="/data_owner_file_upload" method="post" enctype="multipart/form-data">
+            <div class="row">
+  <div class="col-md-5 col-lg-4 col-sm-12">
+    <label class="control-label col-sm-12" for="du_code">Select User code:</label><br><br>
+    <select class="form-control" name="du_code" id="du_code" required>
+        <option value="select one">select user code</option>
+        {% for user in users %}
+
+            <option value="{{ user[0] }}">{{ user[0] }}</option> <!-- Display du_code -->
+        {% endfor %}
+    </select>
+</div>
+<div class="col-md-5 col-lg-4 col-sm-12">
+    <label class="control-label col-sm-12" for="du_id">User Name:</label><br><br>
+    <input type="text" class="form-control"  name="du_id" id="du_id" readonly style="background-color:white;width:50%;text-size:50px;">
+</div>
+<div class="row" style="margin-top:30px;">
+
+               <div class="col-md-4 col-lg-3 col-sm-12">
+            <label class="control-label col-sm-12">Choose file :</label><br><br>
+            <input type="file" id="fileInput" onchange="displaySummary(event)" name="file" required>
+        </div>
+        <div class="col-lg-3" style="width:70%;">
+            <h3>Summary</h3>
+            <div id="summaryDisplay"></div>
+        </div>
+    </div>
+            </div>
+           <br><br>
+            <div class="row">
+             <div class="col-sm-offset-3 col-sm-8">
+            <button style="width:100px;height:50px;margin-top:-200px;" type="submit" class="btn-danger predict">Submit</button>
+            </div>
+                </div>
+         {{ msg }}
+           </form>
+<!-- <form id="pdfForm" enctype="multipart/form-data">-->
+<!--    <input type="file" id="pdfFile" name="pdfFile" accept=".pdf">-->
+<!--    <button style="width:100px;height:50px;margin-top:-200px;"  class="btn-danger predict"type="button" id="generateSummaryBtn">Generate Summary</button>-->
+<!--</form>-->
+<!--<div id="summaryDisplay" style="background-color:white;color:black"></div>-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#du_code').change(function() {
+            var selectedCode = $(this).val();  // Get the selected user code
+            $.ajax({
+                url: '/get_user_id',
+                type: 'POST',
+                data: {du_code: selectedCode},
+                success: function(response) {
+                    $('#du_id').val(response);
+
+                    $('#du_id').css({
+    'background-color': 'yellow',
+    'border-color': 'blue',
+    'color': 'black',
+    'text-size':'30px'
+});
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    function displaySummary(event) {
+        var file = event.target.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+
+        // Make an AJAX request to send the file to the server for summary generation
+        $.ajax({
+            url: '/generate_summary',  // Change this to your backend route for generating summary
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                // Display the summary in the frontend
+                $('#summaryDisplay').text(response.summary);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+</script>
+
+{% endblock %}
+
